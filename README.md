@@ -18,6 +18,12 @@ It walks you through 5 steps and gives you **ready-to-paste AI prompts** for eac
 
 The app keeps your lyrics, characters, shot list, clip links, and progress all in one place. Use **⬇ Save file** to back up a project, **⬆ Load file** to restore it.
 
+### 📚 Ready-made template
+Click **📚 Medley** (top bar) or **Load ready-made 3–5 min Classic Medley** to instantly load a full project: a public-domain medley (Twinkle Twinkle, Old MacDonald, Wheels on the Bus, Baa Baa Black Sheep, If You're Happy) with 5 characters and **21 scenes** already planned. Public-domain rhymes + AI music = safe to monetize on YouTube.
+
+### ⏱️ Length planner
+In **Step 3 (Scenes)** a planner shows your estimated video length (≈5 sec per clip) and tells you when you've hit the **3–5 minute** YouTube sweet spot.
+
 ---
 
 ## ▶️ Run it on your computer

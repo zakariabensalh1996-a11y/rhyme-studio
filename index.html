@@ -20,6 +20,7 @@
     <div class="topbar-actions">
       <select id="projectPicker" title="Switch project"></select>
       <button id="newProjectBtn" class="btn btn-light">+ New</button>
+      <button id="medleyBtn" class="btn btn-light" title="Load the ready-made 3-5 min Classic Medley">📚 Medley</button>
       <button id="exportBtn" class="btn btn-light" title="Download project as a file">⬇ Save file</button>
       <button id="importBtn" class="btn btn-light" title="Load a project file">⬆ Load file</button>
       <input id="importInput" type="file" accept="application/json" hidden />
@@ -33,6 +34,8 @@
       <h2>Welcome! Let's make a nursery rhyme video.</h2>
       <p>Everything you do here is saved automatically in your browser. No account, no cost.</p>
       <button id="welcomeNewBtn" class="btn btn-big">🚀 Start a new video</button>
+      <div class="welcome-or">— or —</div>
+      <button id="welcomeMedleyBtn" class="btn btn-light btn-template">📚 Load ready-made 3–5 min Classic Medley</button>
     </div>
   </section>
 
@@ -118,6 +121,15 @@
         <a class="tool-link" href="https://hailuoai.video" target="_blank" rel="noopener">🌊 Hailuo / MiniMax</a>
         <a class="tool-link" href="https://pika.art" target="_blank" rel="noopener">⚡ Pika</a>
         <button id="autoScenesBtn" class="btn btn-light" title="Create one empty scene per lyric line">✨ Auto-fill from lyrics</button>
+      </div>
+
+      <div id="lengthPlanner" class="length-planner">
+        <span class="lp-icon">⏱️</span>
+        <div class="lp-body">
+          <strong id="lpHeadline">0 scenes planned</strong>
+          <div class="lp-bar"><div id="lpBar" class="lp-bar-fill"></div></div>
+          <small id="lpHint">Aim for 3–5 minutes. Each clip ≈ 5 seconds.</small>
+        </div>
       </div>
 
       <div id="sceneList" class="card-list"></div>

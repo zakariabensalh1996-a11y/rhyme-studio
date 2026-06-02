@@ -208,6 +208,7 @@ function renderScenes(p) {
   const list = $("#sceneList");
   list.innerHTML = "";
   p.scenes.forEach((s, idx) => list.appendChild(sceneCard(p, s, idx)));
+  updateLength(p);
 }
 
 function sceneCard(p, s, idx) {
@@ -266,6 +267,8 @@ function newProject() {
 function bindGlobalEvents() {
   $("#newProjectBtn").addEventListener("click", newProject);
   $("#welcomeNewBtn").addEventListener("click", newProject);
+  $("#medleyBtn").addEventListener("click", loadMedley);
+  $("#welcomeMedleyBtn").addEventListener("click", loadMedley);
 
   $("#projectPicker").addEventListener("change", e => {
     state.activeId = e.target.value; save(); render();
@@ -394,6 +397,108 @@ function sampleProject() {
   p.voice.notes = "Luna the Little Star sings the whole lullaby. Use Hedra: upload Luna's image + the Suno song audio to make her mouth move.";
   p.edit.c1 = true;
   return p;
+}
+
+/* =========================================================
+   Classic Medley template — a full ready-to-make 3-5 min plan
+   (all rhymes are public domain = safe for YouTube)
+   ========================================================= */
+function medleyProject() {
+  const p = blankProject("🎉 Classic Nursery Rhyme Medley (3–5 min)");
+  p.artStyle = "cute 3D Pixar-style cartoon, soft lighting, rounded shapes, bright happy colors, big friendly eyes, for toddlers";
+  p.song.style = "upbeat cheerful kids medley, bright happy female voice, playful piano, ukulele and light drums, clear sing-along, joyful";
+  p.song.lyrics = [
+    "Hello friends, let's sing and play,",
+    "Fun little songs to brighten your day!",
+    "",
+    "Twinkle twinkle little star,",
+    "How I wonder what you are,",
+    "Up above the world so high,",
+    "Like a diamond in the sky.",
+    "",
+    "Old MacDonald had a farm, E-I-E-I-O,",
+    "And on his farm he had a cow, E-I-E-I-O,",
+    "With a moo moo here and a moo moo there,",
+    "And on his farm he had a duck, E-I-E-I-O,",
+    "",
+    "The wheels on the bus go round and round,",
+    "Round and round, round and round,",
+    "The wheels on the bus go round and round,",
+    "All through the town!",
+    "",
+    "Baa baa black sheep, have you any wool?",
+    "Yes sir, yes sir, three bags full!",
+    "",
+    "If you're happy and you know it, clap your hands!",
+    "If you're happy and you know it, stomp your feet!",
+    "If you're happy and you know it, shout hooray!",
+    "",
+    "Thank you friends for singing along,",
+    "See you next time for another song!",
+  ].join("\n");
+  p.characters = [
+    { name: "Mimi the Mouse", desc: "a tiny cheerful mouse host, round ears, red polka-dot bow, big sparkly eyes, friendly smile, waves hello", link: "" },
+    { name: "Benny the Bunny", desc: "a fluffy white baby bunny, long floppy ears, blue overalls, big happy eyes, bouncy", link: "" },
+    { name: "Daisy the Duck", desc: "a cute yellow duckling, orange beak and feet, tiny wings, joyful smile", link: "" },
+    { name: "Farmer Sam", desc: "a friendly round cartoon farmer, straw hat, red checked shirt, rosy cheeks, big smile", link: "" },
+    { name: "Lulu the Lamb", desc: "a soft white baby lamb, fluffy curly wool, pink bow, gentle blue eyes", link: "" },
+  ];
+  const rows = [
+    ["(Intro) Hello friends, let's sing and play", "Title card scene: Mimi the Mouse waves hello on a bright stage with balloons and the title 'Sing Along Rhymes'", "Mimi waves, balloons float up, confetti sparkle"],
+    ["Fun little songs to brighten your day!", "All characters (Mimi, Benny, Daisy, Lulu) jump in together smiling at the camera", "characters bounce in one by one, happy"],
+    ["Twinkle twinkle little star", "Night sky full of glowing stars, one big smiling star in the center, Mimi looking up in wonder", "slow zoom in, stars twinkle and pulse"],
+    ["How I wonder what you are", "Close-up of the friendly big star winking, soft sparkles drifting", "star gently sways, sparkles float"],
+    ["Up above the world so high", "Wide view of the starry sky above rolling hills with tiny glowing houses", "slow pan upward toward the stars"],
+    ["Like a diamond in the sky", "The star shines bright like a sparkling diamond, rainbow glow around it", "bright glow pulses, gentle twinkle"],
+    ["Old MacDonald had a farm, E-I-E-I-O", "Sunny cartoon farm with a red barn, green fields, Farmer Sam waving by the fence", "slow push in on the farm, clouds drift"],
+    ["And on his farm he had a cow", "A happy spotted cartoon cow chewing grass, butterflies around it", "cow turns head and moos, tail swishes"],
+    ["With a moo moo here and a moo moo there", "Close-up of the smiling cow mooing, Farmer Sam laughing beside it", "cow opens mouth to moo, gentle bounce"],
+    ["And on his farm he had a duck, E-I-E-I-O", "Daisy the Duck splashing in a little farm pond, ducklings following", "duck waddles and splashes, ripples in water"],
+    ["The wheels on the bus go round and round", "A cute yellow cartoon school bus driving down a sunny town road, big round wheels", "bus drives left to right, wheels spin"],
+    ["Round and round, round and round", "Close-up of the spinning bus wheels with motion sparkles", "wheels spin fast, gentle bounce"],
+    ["The wheels on the bus go round and round", "Inside the bus: Benny, Daisy and Lulu sitting happily by the windows waving", "characters sway with the bus, wave out window"],
+    ["All through the town!", "Wide shot of the bus passing colorful houses, trees and a park", "bus drives across screen, scenery passes"],
+    ["Baa baa black sheep, have you any wool?", "Lulu the Lamb (and a black sheep friend) on a green hill, fluffy clouds above", "sheep hop gently, wind in the wool"],
+    ["Yes sir, yes sir, three bags full!", "The sheep proudly shows three little bags of soft wool, Mimi clapping", "sheep nods, bags wobble, Mimi claps"],
+    ["If you're happy and you know it, clap your hands!", "All characters in a row clapping their hands, big smiles, colorful background", "everyone claps together, bouncy beat"],
+    ["If you're happy and you know it, stomp your feet!", "Characters stomping their feet happily, little dust puffs", "feet stomp, characters bounce"],
+    ["If you're happy and you know it, shout hooray!", "Characters throwing arms up shouting hooray, confetti and stars burst", "arms up, confetti explodes, big cheer"],
+    ["Thank you friends for singing along", "All characters waving goodbye together, warm sunset colors", "characters wave, gentle sway"],
+    ["See you next time for another song!", "End card: 'Thanks for watching! Subscribe' with characters and a big star", "slow zoom out, star sparkles, gentle float"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Mimi the Mouse can be the singing host. Optional: use Hedra to make Mimi's mouth move on the intro and outro lines. The rest is just music + scenes, no lip-sync needed.";
+  p.edit.c1 = false;
+  return p;
+}
+
+function loadMedley() {
+  const m = medleyProject();
+  state.projects.push(m);
+  state.activeId = m.id;
+  save(); render();
+  toast("📚 Classic Medley loaded — 21 scenes ready!");
+}
+
+/* ---------- Length planner ---------- */
+const SECONDS_PER_CLIP = 5;
+function updateLength(p) {
+  const el = document.getElementById("lengthPlanner");
+  if (!el || !p) return;
+  const n = p.scenes.length;
+  const secs = n * SECONDS_PER_CLIP;
+  const mm = Math.floor(secs / 60), ss = secs % 60;
+  const timeStr = mm + " min " + (ss < 10 ? "0" + ss : ss) + " sec";
+  document.getElementById("lpHeadline").textContent =
+    n + " scene" + (n === 1 ? "" : "s") + " ≈ " + timeStr + " of video";
+  // Target band: 3 min (180s) to 5 min (300s). Bar fills toward 5 min.
+  const pct = Math.min(100, Math.round(secs / 300 * 100));
+  document.getElementById("lpBar").style.width = pct + "%";
+  let hint;
+  if (secs < 180) hint = "Keep adding scenes — you need ~" + Math.ceil((180 - secs) / SECONDS_PER_CLIP) + " more to reach 3 minutes. (Tip: you can also repeat scenes & loop clips in CapCut.)";
+  else if (secs <= 300) hint = "✅ Great — you're in the 3–5 minute sweet spot for YouTube!";
+  else hint = "You have plenty (" + timeStr + "). That's fine — extra scenes give you variety.";
+  document.getElementById("lpHint").textContent = hint;
 }
 
 /* ---------- Boot ---------- */
