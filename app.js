@@ -19,6 +19,7 @@ function blankProject(title) {
     scenes: [],
     voice: { notes: "", links: "" },
     edit: { c1: false, c2: false, c3: false, c4: false, c5: false, c6: false, finalLink: "" },
+    publish: { titles: "", desc: "", tags: "", thumbLink: "", videoUrl: "" },
     currentStep: 1,
   };
 }
@@ -141,6 +142,58 @@ function fullShotList(p) {
 
 function statusLabel(st) {
   return st === "clip" ? "CLIP DONE" : st === "image" ? "image done" : "to do";
+}
+
+/* ---------- YouTube publishing helpers ---------- */
+function cleanTitle(p) {
+  return (p.title || "Nursery Rhymes").replace(/\(.*?\)/g, "").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu, "").trim() || "Nursery Rhymes";
+}
+function youtubeTitles(p) {
+  const t = cleanTitle(p);
+  return [
+    `${t} 🌟 Fun Kids Songs & Nursery Rhymes for Toddlers`,
+    `${t} | Sing Along Nursery Rhymes for Babies 👶🎶`,
+    `🎵 ${t} | Baby Songs & Cartoon Rhymes Compilation`,
+    `${t} | Dance & Sing! Children's Songs for Kids 🐣`,
+  ].join("\n");
+}
+function youtubeTags(p) {
+  return [
+    "nursery rhymes", "kids songs", "baby songs", "toddler songs", "children songs",
+    "sing along", "cartoon for kids", "preschool songs", "nursery rhymes for babies",
+    "kids learning", "animated nursery rhymes", "songs for kids", "baby cartoon",
+    cleanTitle(p).toLowerCase(),
+  ].join(", ");
+}
+function youtubeDescription(p) {
+  const cast = p.characters.map(c => c.name).filter(Boolean).join(", ");
+  const hashtags = youtubeTags(p).split(",").slice(0, 6)
+    .map(s => "#" + s.trim().replace(/\s+/g, "")).join(" ");
+  const lines = [
+    `🎶 ${cleanTitle(p)} 🎶`,
+    "",
+    "Sing, dance and learn with our cute cartoon friends! Perfect for toddlers, babies and preschoolers. 👶🌈",
+  ];
+  if (cast) { lines.push("", "Meet the characters: " + cast + " 🐾"); }
+  lines.push(
+    "",
+    "👍 If you enjoyed this, please LIKE and SUBSCRIBE for new kids songs every week!",
+    "🔔 Tap the bell so you never miss a new nursery rhyme.",
+    "",
+    "⚠️ Parents: please watch together with your little ones.",
+    "",
+    hashtags,
+  );
+  return lines.join("\n");
+}
+function thumbnailPrompt(p) {
+  const cast = p.characters.map(c => c.name).filter(Boolean).slice(0, 3).join(", ");
+  return [
+    p.artStyle,
+    "YouTube thumbnail, big happy " + (cast || "cartoon characters") + " smiling at the camera",
+    "bright colorful scene, lots of empty space at the top for big title text",
+    "high contrast, eye-catching, 16:9",
+  ].filter(Boolean).join(", ");
 }
 
 /* =========================================================
@@ -267,8 +320,42 @@ function newProject() {
 function bindGlobalEvents() {
   $("#newProjectBtn").addEventListener("click", newProject);
   $("#welcomeNewBtn").addEventListener("click", newProject);
-  $("#medleyBtn").addEventListener("click", loadMedley);
-  $("#welcomeMedleyBtn").addEventListener("click", loadMedley);
+
+  // Templates dropdown
+  $("#templatesBtn").addEventListener("click", e => {
+    e.stopPropagation();
+    $("#templateMenu").classList.toggle("hidden");
+  });
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#templateMenu") && !e.target.closest("#templatesBtn"))
+      $("#templateMenu").classList.add("hidden");
+  });
+  // Any [data-tpl] button (topbar menu or welcome screen)
+  document.body.addEventListener("click", e => {
+    const btn = e.target.closest("[data-tpl]"); if (!btn) return;
+    $("#templateMenu").classList.add("hidden");
+    loadTemplate(btn.dataset.tpl);
+  });
+
+  // YouTube generators (Step 6)
+  document.body.addEventListener("click", e => {
+    const g = e.target.closest(".gen-btn"); if (!g) return;
+    const p = getActive(); if (!p) return;
+    switch (g.dataset.gen) {
+      case "titles": setField(p, "publish.titles", youtubeTitles(p)); toast("✨ Title ideas ready"); break;
+      case "desc": setField(p, "publish.desc", youtubeDescription(p)); toast("✨ Description ready"); break;
+      case "tags": setField(p, "publish.tags", youtubeTags(p)); toast("✨ Tags ready"); break;
+      case "thumb": copyText(thumbnailPrompt(p), "Thumbnail prompt"); break;
+    }
+  });
+  // Copy a generated field
+  document.body.addEventListener("click", e => {
+    const c = e.target.closest(".copy-field"); if (!c) return;
+    const p = getActive(); if (!p) return;
+    const val = getPath(p, c.dataset.copy) || "";
+    if (!val.trim()) { toast("Generate it first ✨"); return; }
+    copyText(val, "Copied");
+  });
 
   $("#projectPicker").addEventListener("change", e => {
     state.activeId = e.target.value; save(); render();
@@ -472,12 +559,103 @@ function medleyProject() {
   return p;
 }
 
-function loadMedley() {
-  const m = medleyProject();
+function farmProject() {
+  const p = blankProject("🐮 Farm Animals Song (Old MacDonald)");
+  p.artStyle = "cute 3D Pixar-style cartoon, sunny farm, soft lighting, rounded shapes, bright happy colors, for toddlers";
+  p.song.style = "happy upbeat kids farm song, cheerful female voice, banjo and light drums, fun animal sounds, sing-along";
+  p.song.lyrics = [
+    "Old MacDonald had a farm, E-I-E-I-O!",
+    "And on his farm he had a cow, E-I-E-I-O!",
+    "With a moo moo here, and a moo moo there,",
+    "And on his farm he had a pig, E-I-E-I-O!",
+    "With an oink oink here, and an oink oink there,",
+    "And on his farm he had a duck, E-I-E-I-O!",
+    "With a quack quack here, and a quack quack there,",
+    "And on his farm he had a sheep, E-I-E-I-O!",
+    "With a baa baa here, and a baa baa there,",
+    "Old MacDonald had a farm, E-I-E-I-O!",
+  ].join("\n");
+  p.characters = [
+    { name: "Farmer Sam", desc: "a friendly round cartoon farmer, straw hat, red checked shirt, rosy cheeks, big smile, waving", link: "" },
+    { name: "Bessie the Cow", desc: "a happy spotted cartoon cow, big eyes, pink nose, gentle smile, little bell", link: "" },
+    { name: "Percy the Pig", desc: "a cute pink piglet, curly tail, muddy feet, cheerful grin", link: "" },
+    { name: "Daisy the Duck", desc: "a yellow duckling, orange beak and feet, tiny wings, joyful smile", link: "" },
+    { name: "Woolly the Sheep", desc: "a fluffy white sheep, curly wool, gentle eyes, soft smile", link: "" },
+  ];
+  const rows = [
+    ["(Intro) Old MacDonald had a farm", "Title card: sunny red barn, green fields, Farmer Sam waving by a wooden fence, balloons", "Farmer Sam waves, clouds drift, title sparkles"],
+    ["E-I-E-I-O!", "Wide cheerful farm scene with all the animals lined up smiling at the camera", "animals bounce in one by one"],
+    ["And on his farm he had a cow", "Bessie the Cow standing in a green field chewing grass, butterflies around her", "cow turns to camera, tail swishes"],
+    ["With a moo moo here, and a moo moo there", "Close-up of Bessie mooing happily, Farmer Sam laughing beside her", "cow opens mouth to moo, gentle bounce"],
+    ["And on his farm he had a pig", "Percy the Pig playing in a little mud puddle near the barn", "pig hops and splashes mud, ripples"],
+    ["With an oink oink here, and an oink oink there", "Close-up of Percy oinking with a big grin, mud splashes", "pig wiggles snout, bounces"],
+    ["And on his farm he had a duck", "Daisy the Duck swimming in a farm pond with little ducklings following", "duck glides across water, ducklings follow"],
+    ["With a quack quack here, and a quack quack there", "Close-up of Daisy quacking, water sparkles around her", "duck flaps wings, quacks"],
+    ["And on his farm he had a sheep", "Woolly the Sheep hopping on a grassy green hill, fluffy clouds above", "sheep hops gently, wool bounces"],
+    ["With a baa baa here, and a baa baa there", "Close-up of Woolly baaing happily, Farmer Sam clapping", "sheep nods and baas, farmer claps"],
+    ["All the animals together!", "All farm animals dancing in a circle around Farmer Sam, confetti and music notes", "everyone dances and bounces, notes float"],
+    ["(Outro) Old MacDonald had a farm, E-I-E-I-O!", "End card: 'Thanks for watching! Subscribe' with all animals waving, warm sunset", "characters wave goodbye, slow zoom out"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Farmer Sam can sing the verses. Animal sounds (moo, oink, quack, baa) can be added as fun sound effects in CapCut.";
+  return p;
+}
+
+function bedtimeProject() {
+  const p = blankProject("⭐ Bedtime Stars Lullaby");
+  p.artStyle = "cute 3D Pixar-style cartoon, soft dreamy night lighting, rounded shapes, pastel colors, gentle glow, for toddlers";
+  p.song.style = "soft gentle lullaby, calm female voice, twinkly bells and soft piano, slow dreamy tempo, soothing";
+  p.song.lyrics = [
+    "Twinkle twinkle little star,",
+    "How I wonder what you are,",
+    "Up above the world so high,",
+    "Like a diamond in the sky,",
+    "Twinkle twinkle little star,",
+    "How I wonder what you are.",
+    "",
+    "Sleepy time for little ones,",
+    "Day is done and dreams have come,",
+    "Close your eyes and rest your head,",
+    "Cozy warm in your soft bed,",
+    "Goodnight stars and goodnight moon,",
+    "Sweet dreams, we'll see you soon.",
+  ].join("\n");
+  p.characters = [
+    { name: "Luna the Little Star", desc: "a glowing baby star, soft yellow, rosy cheeks, big sparkly eyes, tiny arms, gentle smile, soft golden glow", link: "" },
+    { name: "Mr. Moon", desc: "a friendly crescent moon, soft cream color, sleepy kind face, gentle smile", link: "" },
+    { name: "Baby Bo", desc: "a sleepy toddler in blue star pajamas, hugging a teddy bear, big round eyes, sweet sleepy smile", link: "" },
+  ];
+  const rows = [
+    ["Twinkle twinkle little star", "Deep blue night sky full of glowing stars, Luna the Little Star twinkling in the center", "slow zoom in, stars gently pulse"],
+    ["How I wonder what you are", "Close-up of Luna winking with soft sparkles drifting around her", "Luna sways, sparkles float"],
+    ["Up above the world so high", "Wide view of the starry sky above soft hills and tiny houses with warm windows", "slow pan upward to the stars"],
+    ["Like a diamond in the sky", "Luna shines bright like a sparkling diamond, soft rainbow glow", "bright glow pulses, gentle twinkle"],
+    ["Twinkle twinkle little star", "Mr. Moon smiling among soft clouds, stars twinkling around his glow", "clouds drift, moon glow pulses"],
+    ["How I wonder what you are", "Luna and Mr. Moon together, soft starlight, peaceful night sky", "gentle sway, soft sparkle"],
+    ["Sleepy time for little ones", "Baby Bo in cozy pajamas yawning by a window, starlight outside", "Baby Bo yawns and rubs eyes"],
+    ["Close your eyes and rest your head", "Baby Bo climbing into a soft bed hugging a teddy bear", "Baby Bo snuggles under blanket"],
+    ["Goodnight stars and goodnight moon", "View from the bed: Luna and Mr. Moon glowing softly through the window waving goodnight", "Luna and Moon gently wave"],
+    ["Sweet dreams, we'll see you soon", "End card: Baby Bo asleep, soft starlight, 'Goodnight 💤 Subscribe' text", "very slow zoom out, calm and peaceful"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Luna the Little Star can softly sing the lullaby. Keep everything slow and calm for a bedtime feel.";
+  return p;
+}
+
+const TEMPLATES = { medley: medleyProject, farm: farmProject, bedtime: bedtimeProject };
+function loadTemplate(kind) {
+  const builder = TEMPLATES[kind] || medleyProject;
+  const m = builder();
   state.projects.push(m);
   state.activeId = m.id;
   save(); render();
-  toast("📚 Classic Medley loaded — 21 scenes ready!");
+  toast("📚 Loaded: " + m.title);
+}
+
+function setField(p, path, value) {
+  setPath(p, path, value); save();
+  const el = document.querySelector('[data-bind="' + path + '"]');
+  if (el) el.value = value;
 }
 
 /* ---------- Length planner ---------- */

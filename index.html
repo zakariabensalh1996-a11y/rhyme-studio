@@ -20,7 +20,14 @@
     <div class="topbar-actions">
       <select id="projectPicker" title="Switch project"></select>
       <button id="newProjectBtn" class="btn btn-light">+ New</button>
-      <button id="medleyBtn" class="btn btn-light" title="Load the ready-made 3-5 min Classic Medley">📚 Medley</button>
+      <div class="dropdown">
+        <button id="templatesBtn" class="btn btn-light" title="Load a ready-made project">📚 Templates ▾</button>
+        <div id="templateMenu" class="dropdown-menu hidden">
+          <button data-tpl="medley">🎉 Classic Medley (3–5 min)</button>
+          <button data-tpl="farm">🐮 Farm Animals</button>
+          <button data-tpl="bedtime">⭐ Bedtime Stars</button>
+        </div>
+      </div>
       <button id="exportBtn" class="btn btn-light" title="Download project as a file">⬇ Save file</button>
       <button id="importBtn" class="btn btn-light" title="Load a project file">⬆ Load file</button>
       <input id="importInput" type="file" accept="application/json" hidden />
@@ -34,8 +41,12 @@
       <h2>Welcome! Let's make a nursery rhyme video.</h2>
       <p>Everything you do here is saved automatically in your browser. No account, no cost.</p>
       <button id="welcomeNewBtn" class="btn btn-big">🚀 Start a new video</button>
-      <div class="welcome-or">— or —</div>
-      <button id="welcomeMedleyBtn" class="btn btn-light btn-template">📚 Load ready-made 3–5 min Classic Medley</button>
+      <div class="welcome-or">— or load a ready-made video —</div>
+      <div class="template-buttons">
+        <button class="btn btn-light btn-template" data-tpl="medley">🎉 Classic Medley<br><small>3–5 min · 21 scenes</small></button>
+        <button class="btn btn-light btn-template" data-tpl="farm">🐮 Farm Animals<br><small>Old MacDonald</small></button>
+        <button class="btn btn-light btn-template" data-tpl="bedtime">⭐ Bedtime Stars<br><small>Lullaby</small></button>
+      </div>
     </div>
   </section>
 
@@ -47,6 +58,7 @@
       <button class="step-tab" data-step="3"><span class="num">3</span> Scenes</button>
       <button class="step-tab" data-step="4"><span class="num">4</span> Voice / Lip-sync</button>
       <button class="step-tab" data-step="5"><span class="num">5</span> Edit &amp; Export</button>
+      <button class="step-tab" data-step="6"><span class="num">6</span> Publish 📺</button>
     </nav>
 
     <div class="progressbar"><div id="progressFill" class="progressbar-fill"></div></div>
@@ -181,8 +193,61 @@
       </ul>
 
       <div class="field">
-        <label>🔗 Link to your finished video</label>
-        <input type="text" data-bind="edit.finalLink" placeholder="YouTube / file link to the final video 🎉" />
+        <label>🔗 Link to your finished video file</label>
+        <input type="text" data-bind="edit.finalLink" placeholder="Where the exported video is saved 🎉" />
+      </div>
+    </section>
+
+    <!-- ============ STEP 6: PUBLISH ============ -->
+    <section class="panel" data-panel="6">
+      <div class="panel-head">
+        <h2>📺 Step 6 — Publish on YouTube</h2>
+        <p>Generate a catchy title, description, tags, and thumbnail — then upload.</p>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://studio.youtube.com" target="_blank" rel="noopener">📺 YouTube Studio (upload)</a>
+        <a class="tool-link" href="https://www.canva.com" target="_blank" rel="noopener">🖼️ Canva (free thumbnails)</a>
+      </div>
+
+      <div class="field">
+        <label>Video title ideas</label>
+        <textarea data-bind="publish.titles" rows="5" placeholder="Click Generate to get catchy title ideas..."></textarea>
+        <div class="card-row wrap" style="margin-top:8px">
+          <button class="btn btn-light gen-btn" data-gen="titles">✨ Generate titles</button>
+          <button class="btn btn-prompt-sm copy-field" data-copy="publish.titles">📋 Copy</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description (with song list)</label>
+        <textarea data-bind="publish.desc" rows="8" placeholder="Click Generate to write a YouTube description..."></textarea>
+        <div class="card-row wrap" style="margin-top:8px">
+          <button class="btn btn-light gen-btn" data-gen="desc">✨ Generate description</button>
+          <button class="btn btn-prompt-sm copy-field" data-copy="publish.desc">📋 Copy</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Tags / hashtags</label>
+        <textarea data-bind="publish.tags" rows="3" placeholder="Click Generate for kids-video tags..."></textarea>
+        <div class="card-row wrap" style="margin-top:8px">
+          <button class="btn btn-light gen-btn" data-gen="tags">✨ Generate tags</button>
+          <button class="btn btn-prompt-sm copy-field" data-copy="publish.tags">📋 Copy</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>🖼️ Thumbnail</label>
+        <div class="tool-row">
+          <button class="btn btn-prompt gen-btn" data-gen="thumb">📋 Copy thumbnail image prompt</button>
+        </div>
+        <input type="text" data-bind="publish.thumbLink" placeholder="🔗 link to your thumbnail image" />
+      </div>
+
+      <div class="field">
+        <label>🔗 Published YouTube link 🎉</label>
+        <input type="text" data-bind="publish.videoUrl" placeholder="Paste your live YouTube video URL when it's up!" />
       </div>
     </section>
   </main>

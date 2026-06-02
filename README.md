@@ -15,11 +15,17 @@ It walks you through 5 steps and gives you **ready-to-paste AI prompts** for eac
 | 3. 🎬 Scenes | Build a shot list → copy image + video prompts | [Kling AI](https://klingai.com), [Hailuo](https://hailuoai.video), [Pika](https://pika.art) |
 | 4. 👄 Voice / lip-sync | Make mouths move to the song | [Hedra](https://www.hedra.com), [ElevenLabs](https://elevenlabs.io) |
 | 5. ✂️ Edit | Assemble clips on the beat, add captions | [CapCut](https://www.capcut.com), [DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve) |
+| 6. 📺 Publish | Generate title, description, tags & thumbnail prompt | [YouTube Studio](https://studio.youtube.com), [Canva](https://www.canva.com) |
 
 The app keeps your lyrics, characters, shot list, clip links, and progress all in one place. Use **⬇ Save file** to back up a project, **⬆ Load file** to restore it.
 
-### 📚 Ready-made template
-Click **📚 Medley** (top bar) or **Load ready-made 3–5 min Classic Medley** to instantly load a full project: a public-domain medley (Twinkle Twinkle, Old MacDonald, Wheels on the Bus, Baa Baa Black Sheep, If You're Happy) with 5 characters and **21 scenes** already planned. Public-domain rhymes + AI music = safe to monetize on YouTube.
+### 📚 Ready-made templates
+Click **📚 Templates** (top bar) or a template button on the welcome screen to instantly load a full project:
+- **🎉 Classic Medley** — Twinkle Twinkle + Old MacDonald + Wheels on the Bus + Baa Baa Black Sheep + If You're Happy. 5 characters, 21 scenes (~3–5 min).
+- **🐮 Farm Animals** — Old MacDonald with cow, pig, duck, sheep. 5 characters, 12 scenes.
+- **⭐ Bedtime Stars** — gentle Twinkle Twinkle lullaby. 3 characters, 10 scenes.
+
+All use **public-domain rhymes + AI music = safe to monetize** on YouTube.
 
 ### ⏱️ Length planner
 In **Step 3 (Scenes)** a planner shows your estimated video length (≈5 sec per clip) and tells you when you've hit the **3–5 minute** YouTube sweet spot.
