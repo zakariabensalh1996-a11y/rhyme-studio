@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎵 Rhyme Studio — Free AI Nursery Rhyme Video Maker</title>
+  <meta name="description" content="Plan and build 3D-cartoon nursery rhyme videos using only free AI tools." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🎵</span>
+      <div>
+        <h1>Rhyme Studio</h1>
+        <p class="tagline">Make 3D-cartoon nursery rhyme videos with free AI</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <select id="projectPicker" title="Switch project"></select>
+      <button id="newProjectBtn" class="btn btn-light">+ New</button>
+      <button id="exportBtn" class="btn btn-light" title="Download project as a file">⬇ Save file</button>
+      <button id="importBtn" class="btn btn-light" title="Load a project file">⬆ Load file</button>
+      <input id="importInput" type="file" accept="application/json" hidden />
+    </div>
+  </header>
+
+  <!-- Welcome / empty state -->
+  <section id="welcome" class="welcome hidden">
+    <div class="welcome-card">
+      <div class="welcome-emoji">🐣🎬🎶</div>
+      <h2>Welcome! Let's make a nursery rhyme video.</h2>
+      <p>Everything you do here is saved automatically in your browser. No account, no cost.</p>
+      <button id="welcomeNewBtn" class="btn btn-big">🚀 Start a new video</button>
+    </div>
+  </section>
+
+  <main id="workspace" class="workspace hidden">
+    <!-- Step navigation -->
+    <nav class="steps" id="stepNav">
+      <button class="step-tab active" data-step="1"><span class="num">1</span> Song</button>
+      <button class="step-tab" data-step="2"><span class="num">2</span> Characters</button>
+      <button class="step-tab" data-step="3"><span class="num">3</span> Scenes</button>
+      <button class="step-tab" data-step="4"><span class="num">4</span> Voice / Lip-sync</button>
+      <button class="step-tab" data-step="5"><span class="num">5</span> Edit &amp; Export</button>
+    </nav>
+
+    <div class="progressbar"><div id="progressFill" class="progressbar-fill"></div></div>
+
+    <!-- ============ STEP 1: SONG ============ -->
+    <section class="panel active" data-panel="1">
+      <div class="panel-head">
+        <h2>🎶 Step 1 — Make the song</h2>
+        <p>Write your rhyme, then turn it into music + singing with a free tool.</p>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label>Video title</label>
+          <input type="text" data-bind="title" placeholder="e.g. Twinkle Twinkle Baby Stars" />
+        </div>
+        <div class="field">
+          <label>Music style</label>
+          <input type="text" data-bind="song.style" placeholder="e.g. cheerful kids pop, ukulele, female voice, slow tempo" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Lyrics</label>
+        <textarea data-bind="song.lyrics" rows="8" placeholder="Twinkle twinkle little star...&#10;Write each line on its own row."></textarea>
+        <small class="hint">Tip: keep lines short and repeat the chorus — toddlers love repetition.</small>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://suno.com" target="_blank" rel="noopener">🎵 Open Suno (free song)</a>
+        <a class="tool-link" href="https://www.udio.com" target="_blank" rel="noopener">🎼 Open Udio</a>
+        <button class="btn btn-prompt" data-prompt="song">📋 Copy Suno prompt</button>
+      </div>
+
+      <div class="field">
+        <label>🔗 Link to your finished song (paste after you make it)</label>
+        <input type="text" data-bind="song.link" placeholder="Paste the Suno song link or note where the file is saved" />
+      </div>
+    </section>
+
+    <!-- ============ STEP 2: CHARACTERS ============ -->
+    <section class="panel" data-panel="2">
+      <div class="panel-head">
+        <h2>🧸 Step 2 — Design your characters</h2>
+        <p>Describe each character once, generate a picture, and reuse it everywhere so they stay consistent.</p>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://leonardo.ai" target="_blank" rel="noopener">🎨 Leonardo.ai (free images)</a>
+        <a class="tool-link" href="https://www.bing.com/images/create" target="_blank" rel="noopener">🖼️ Bing Image Creator</a>
+        <a class="tool-link" href="https://designer.microsoft.com" target="_blank" rel="noopener">✨ MS Designer</a>
+      </div>
+
+      <div class="field">
+        <label>Overall art style (used in every prompt)</label>
+        <input type="text" data-bind="artStyle" placeholder="e.g. cute 3D Pixar-style cartoon, soft lighting, rounded shapes, bright colors" />
+      </div>
+
+      <div id="characterList" class="card-list"></div>
+      <button id="addCharacterBtn" class="btn btn-add">+ Add character</button>
+    </section>
+
+    <!-- ============ STEP 3: SCENES ============ -->
+    <section class="panel" data-panel="3">
+      <div class="panel-head">
+        <h2>🎬 Step 3 — Build your scenes (shot list)</h2>
+        <p>Break the song into short shots. For each one: make an image, then animate it into a 3–5s clip.</p>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://klingai.com" target="_blank" rel="noopener">🎥 Kling AI (free video)</a>
+        <a class="tool-link" href="https://hailuoai.video" target="_blank" rel="noopener">🌊 Hailuo / MiniMax</a>
+        <a class="tool-link" href="https://pika.art" target="_blank" rel="noopener">⚡ Pika</a>
+        <button id="autoScenesBtn" class="btn btn-light" title="Create one empty scene per lyric line">✨ Auto-fill from lyrics</button>
+      </div>
+
+      <div id="sceneList" class="card-list"></div>
+      <button id="addSceneBtn" class="btn btn-add">+ Add scene</button>
+    </section>
+
+    <!-- ============ STEP 4: VOICE / LIP-SYNC ============ -->
+    <section class="panel" data-panel="4">
+      <div class="panel-head">
+        <h2>👄 Step 4 — Voices &amp; lip-sync (optional)</h2>
+        <p>Make a character's mouth move to the singing, or add spoken lines.</p>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://www.hedra.com" target="_blank" rel="noopener">🗣️ Hedra (talking faces)</a>
+        <a class="tool-link" href="https://elevenlabs.io" target="_blank" rel="noopener">🎙️ ElevenLabs (free voice)</a>
+      </div>
+
+      <div class="field">
+        <label>Notes — which characters talk/sing, and when</label>
+        <textarea data-bind="voice.notes" rows="6" placeholder="e.g. The bunny sings the chorus. Use Hedra: upload bunny image + chorus audio."></textarea>
+      </div>
+      <div class="field">
+        <label>🔗 Links to lip-sync clips</label>
+        <textarea data-bind="voice.links" rows="3" placeholder="Paste links to any talking/singing clips here"></textarea>
+      </div>
+    </section>
+
+    <!-- ============ STEP 5: EDIT ============ -->
+    <section class="panel" data-panel="5">
+      <div class="panel-head">
+        <h2>✂️ Step 5 — Edit it all together</h2>
+        <p>Drop your clips on the song's timeline, cut to the beat, add captions, export.</p>
+      </div>
+
+      <div class="tool-row">
+        <a class="tool-link" href="https://www.capcut.com" target="_blank" rel="noopener">✂️ CapCut (free editor)</a>
+        <a class="tool-link" href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">🎞️ DaVinci Resolve</a>
+        <button id="copyShotlistBtn" class="btn btn-prompt">📋 Copy full shot list</button>
+      </div>
+
+      <ul class="checklist" id="editChecklist">
+        <li><label><input type="checkbox" data-bind="edit.c1" /> Import the song audio first</label></li>
+        <li><label><input type="checkbox" data-bind="edit.c2" /> Place each clip in scene order</label></li>
+        <li><label><input type="checkbox" data-bind="edit.c3" /> Cut clips to match the beat / lyric lines</label></li>
+        <li><label><input type="checkbox" data-bind="edit.c4" /> Add big, colorful word captions (karaoke style)</label></li>
+        <li><label><input type="checkbox" data-bind="edit.c5" /> Add a 3-second title intro + end card</label></li>
+        <li><label><input type="checkbox" data-bind="edit.c6" /> Export 1080p, then watch it fully once</label></li>
+      </ul>
+
+      <div class="field">
+        <label>🔗 Link to your finished video</label>
+        <input type="text" data-bind="edit.finalLink" placeholder="YouTube / file link to the final video 🎉" />
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Built with Rhyme Studio · saved in your browser · 100% free tools</span>
+    <button id="deleteProjectBtn" class="btn btn-danger-text" title="Delete current project">🗑 Delete this project</button>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Templates -->
+  <template id="characterTemplate">
+    <div class="card character-card">
+      <div class="card-row">
+        <input type="text" class="char-name" placeholder="Character name (e.g. Lila the Lamb)" />
+        <button class="btn btn-del" title="Remove">✕</button>
+      </div>
+      <textarea class="char-desc" rows="3" placeholder="Look: baby lamb, fluffy white wool, big blue eyes, pink bow, tiny, smiling"></textarea>
+      <div class="card-row">
+        <button class="btn btn-prompt-sm char-prompt">📋 Copy image prompt</button>
+        <input type="text" class="char-link" placeholder="🔗 link to generated image" />
+      </div>
+    </div>
+  </template>
+
+  <template id="sceneTemplate">
+    <div class="card scene-card">
+      <div class="card-row">
+        <span class="scene-num">Scene</span>
+        <input type="text" class="scene-lyric" placeholder="Lyric line for this shot" />
+        <select class="scene-status" title="Status">
+          <option value="todo">⬜ To do</option>
+          <option value="image">🖼️ Image done</option>
+          <option value="clip">✅ Clip done</option>
+        </select>
+        <button class="btn btn-del" title="Remove">✕</button>
+      </div>
+      <textarea class="scene-desc" rows="2" placeholder="What we see: Lila the Lamb hops across a sunny green hill, butterflies around her"></textarea>
+      <textarea class="scene-motion" rows="2" placeholder="Motion / camera: slow zoom in, lamb hops happily, gentle wind"></textarea>
+      <div class="card-row wrap">
+        <button class="btn btn-prompt-sm scene-img-prompt">📋 Image prompt</button>
+        <button class="btn btn-prompt-sm scene-vid-prompt">📋 Video prompt</button>
+        <input type="text" class="scene-link" placeholder="🔗 link to finished clip" />
+      </div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
