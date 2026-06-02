@@ -13,6 +13,7 @@ function blankProject(title) {
   return {
     id: "p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
     title: title || "My Nursery Rhyme",
+    format: "16:9",
     artStyle: "cute 3D Pixar-style cartoon, soft lighting, rounded shapes, bright happy colors, for toddlers",
     song: { style: "cheerful kids song, gentle female voice, ukulele and bells, slow tempo", lyrics: "", link: "" },
     characters: [],
@@ -100,13 +101,20 @@ function characterPrompt(p, c) {
   return parts.filter(Boolean).join(", ");
 }
 
+function formatTag(p) {
+  return p.format === "9:16"
+    ? "vertical 9:16 portrait composition, tall full-screen framing for Shorts/TikTok"
+    : "16:9 widescreen composition";
+}
+
 function sceneImagePrompt(p, s) {
   const cast = p.characters.map(c => c.name).filter(Boolean).join(", ");
   const parts = [
     p.artStyle,
     s.desc || "a happy cartoon scene",
     cast ? ("characters in scene: " + cast) : "",
-    "colorful storybook background, cinematic, bright and cheerful, 16:9",
+    "colorful storybook background, cinematic, bright and cheerful",
+    formatTag(p),
   ];
   return parts.filter(Boolean).join(", ");
 }
@@ -192,7 +200,8 @@ function thumbnailPrompt(p) {
     p.artStyle,
     "YouTube thumbnail, big happy " + (cast || "cartoon characters") + " smiling at the camera",
     "bright colorful scene, lots of empty space at the top for big title text",
-    "high contrast, eye-catching, 16:9",
+    "high contrast, eye-catching",
+    formatTag(p),
   ].filter(Boolean).join(", ");
 }
 
@@ -397,6 +406,16 @@ function bindGlobalEvents() {
   });
   $("#copyShotlistBtn").addEventListener("click", () => {
     const p = getActive(); if (p) copyText(fullShotList(p), "Full shot list");
+  });
+  $("#downloadPackBtn").addEventListener("click", () => {
+    const p = getActive(); if (!p) return;
+    downloadFile(safeName(p) + "_production_pack.txt", productionPack(p));
+    toast("📦 Production pack downloaded");
+  });
+  $("#downloadSrtBtn").addEventListener("click", () => {
+    const p = getActive(); if (!p) return;
+    downloadFile(safeName(p) + "_captions.srt", srtFromProject(p));
+    toast("📝 Captions (.srt) downloaded");
   });
 
   // Add character / scene
@@ -656,6 +675,63 @@ function setField(p, path, value) {
   setPath(p, path, value); save();
   const el = document.querySelector('[data-bind="' + path + '"]');
   if (el) el.value = value;
+}
+
+/* ---------- Exports: download file, SRT captions, production pack ---------- */
+function safeName(p) { return (p.title || "rhyme-project").replace(/[^\w\-]+/g, "_"); }
+
+function downloadFile(name, text, type) {
+  const blob = new Blob([text], { type: type || "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function srtTime(totalSec) {
+  const pad = (n, l) => String(n).padStart(l || 2, "0");
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = Math.floor(totalSec % 60);
+  return pad(h) + ":" + pad(m) + ":" + pad(s) + ",000";
+}
+function srtFromProject(p) {
+  const dur = SECONDS_PER_CLIP;
+  const items = p.scenes.length ? p.scenes.map(s => s.lyric) : (p.song.lyrics || "").split("\n");
+  const out = [];
+  let t = 0, idx = 1;
+  items.forEach(line => {
+    const text = (line || "").replace(/\(.*?\)/g, "").trim(); // drop (Intro) etc.
+    if (text) { out.push(idx++, srtTime(t) + " --> " + srtTime(t + dur), text, ""); }
+    t += dur;
+  });
+  return out.join("\n");
+}
+
+function productionPack(p) {
+  const bar = "==================================================";
+  const L = [];
+  L.push("PRODUCTION PACK — " + cleanTitle(p));
+  L.push("Format: " + (p.format === "9:16" ? "Shorts 9:16 (tall)" : "YouTube 16:9 (wide)"));
+  L.push("Art style: " + p.artStyle);
+  L.push("Estimated length: " + p.scenes.length + " clips ≈ " + (p.scenes.length * SECONDS_PER_CLIP) + " seconds");
+  L.push("", bar, "STEP 1 — SONG (paste into Suno)", bar, songPrompt(p));
+  L.push("", bar, "STEP 2 — CHARACTER IMAGE PROMPTS", bar);
+  if (!p.characters.length) L.push("(no characters yet)");
+  p.characters.forEach(c => {
+    L.push("• " + (c.name || "Character") + ":");
+    L.push(characterPrompt(p, c));
+    if (c.link) L.push("image: " + c.link);
+    L.push("");
+  });
+  L.push(bar, "STEP 3 — SCENE SHOT LIST (image + video prompts)", bar, fullShotList(p));
+  L.push(bar, "STEP 6 — YOUTUBE KIT", bar);
+  L.push("TITLE IDEAS:", p.publish.titles || youtubeTitles(p), "");
+  L.push("DESCRIPTION:", p.publish.desc || youtubeDescription(p), "");
+  L.push("TAGS:", p.publish.tags || youtubeTags(p), "");
+  L.push("THUMBNAIL PROMPT:", thumbnailPrompt(p));
+  return L.join("\n");
 }
 
 /* ---------- Length planner ---------- */

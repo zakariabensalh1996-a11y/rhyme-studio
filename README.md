@@ -30,6 +30,15 @@ All use **public-domain rhymes + AI music = safe to monetize** on YouTube.
 ### ⏱️ Length planner
 In **Step 3 (Scenes)** a planner shows your estimated video length (≈5 sec per clip) and tells you when you've hit the **3–5 minute** YouTube sweet spot.
 
+### 📐 Video format
+In **Step 1** pick **16:9 (YouTube)** or **9:16 (Shorts / TikTok / Reels)** — the choice is added automatically to every image, video, and thumbnail prompt.
+
+### 📦 Exports (Step 5)
+- **Production Pack (.txt)** — one file with *everything*: Suno song prompt, all character prompts, the full scene shot list (image + video prompts), and the YouTube kit. Great for working offline or sharing.
+- **Captions (.srt)** — timed subtitle file built from your scenes (≈5 sec each). Import it straight into CapCut or YouTube for karaoke-style captions.
+
+*(These were modeled on common features in open-source AI video tools like ViMax, YumCut, and faceless-video generators — kept to what works in a free, no-server app.)*
+
 ---
 
 ## ▶️ Run it on your computer

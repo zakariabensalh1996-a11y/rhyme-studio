@@ -82,6 +82,15 @@
       </div>
 
       <div class="field">
+        <label>Video format</label>
+        <select data-bind="format">
+          <option value="16:9">📺 YouTube — wide 16:9 (normal video)</option>
+          <option value="9:16">📱 Shorts / TikTok / Reels — tall 9:16</option>
+        </select>
+        <small class="hint">This is added to your picture and video prompts automatically.</small>
+      </div>
+
+      <div class="field">
         <label>Lyrics</label>
         <textarea data-bind="song.lyrics" rows="8" placeholder="Twinkle twinkle little star...&#10;Write each line on its own row."></textarea>
         <small class="hint">Tip: keep lines short and repeat the chorus — toddlers love repetition.</small>
@@ -181,6 +190,8 @@
         <a class="tool-link" href="https://www.capcut.com" target="_blank" rel="noopener">✂️ CapCut (free editor)</a>
         <a class="tool-link" href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener">🎞️ DaVinci Resolve</a>
         <button id="copyShotlistBtn" class="btn btn-prompt">📋 Copy full shot list</button>
+        <button id="downloadPackBtn" class="btn btn-light" title="Download everything as one text file">📦 Production Pack (.txt)</button>
+        <button id="downloadSrtBtn" class="btn btn-light" title="Download timed captions for CapCut / YouTube">📝 Captions (.srt)</button>
       </div>
 
       <ul class="checklist" id="editChecklist">
