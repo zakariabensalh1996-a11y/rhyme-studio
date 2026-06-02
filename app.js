@@ -7,6 +7,7 @@ const STORAGE_KEY = "rhymeStudio.v1";
 
 /* ---------- State ---------- */
 let state = { projects: [], activeId: null };
+let firstVisit = false;
 
 function blankProject(title) {
   return {
@@ -26,6 +27,7 @@ function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) state = JSON.parse(raw);
+    else firstVisit = true;
   } catch (e) { console.warn("Could not load saved data", e); }
   if (!Array.isArray(state.projects)) state = { projects: [], activeId: null };
 }
@@ -359,7 +361,48 @@ function bindGlobalEvents() {
   });
 }
 
+/* =========================================================
+   Sample project — auto-loaded on a visitor's first open
+   ========================================================= */
+function sampleProject() {
+  const p = blankProject("⭐ Twinkle Twinkle Baby Stars (sample)");
+  p.artStyle = "cute 3D Pixar-style cartoon, soft dreamy night lighting, rounded shapes, pastel colors, gentle glow, for toddlers";
+  p.song.style = "soft lullaby, gentle female voice, twinkly bells and soft piano, slow dreamy tempo";
+  p.song.lyrics = [
+    "Twinkle twinkle baby stars,",
+    "Up above so high you are,",
+    "Little stars all shining bright,",
+    "Twinkle through the cozy night,",
+    "Twinkle twinkle baby stars,",
+    "Sweet dreams little ones you are.",
+  ].join("\n");
+  p.song.link = "";
+  p.characters = [
+    { name: "Luna the Little Star", desc: "a glowing baby star, soft yellow, rosy cheeks, big sparkly eyes, tiny arms, happy gentle smile, soft golden glow", link: "" },
+    { name: "Mr. Moon", desc: "a friendly crescent moon, soft cream color, sleepy kind face, closed peaceful eyes, gentle smile", link: "" },
+    { name: "Baby Bo", desc: "a sleepy toddler in blue star pajamas, hugging a teddy bear, big round eyes, sweet sleepy smile", link: "" },
+  ];
+  const scenes = [
+    { lyric: "Twinkle twinkle baby stars,", desc: "A deep blue night sky full of glowing baby stars, Luna the Little Star twinkling happily in the center", motion: "slow zoom in, stars gently pulse and sparkle", status: "clip" },
+    { lyric: "Up above so high you are,", desc: "Wide view of the starry sky above soft rolling hills and tiny houses with warm windows", motion: "slow pan upward toward the stars", status: "image" },
+    { lyric: "Little stars all shining bright,", desc: "A cluster of cute baby stars giggling and shining, soft sparkles floating around them", motion: "stars bounce gently, sparkles drift", status: "todo" },
+    { lyric: "Twinkle through the cozy night,", desc: "Mr. Moon smiling among the clouds while stars twinkle around his soft glow", motion: "gentle drifting clouds, soft glow pulsing", status: "todo" },
+    { lyric: "Twinkle twinkle baby stars,", desc: "Luna the Little Star waving goodnight, surrounded by twinkling friends", motion: "Luna waves, slow gentle sway", status: "todo" },
+    { lyric: "Sweet dreams little ones you are.", desc: "Baby Bo asleep in bed hugging a teddy, soft starlight through the window, Luna glowing softly", motion: "very slow zoom out, calm and peaceful", status: "todo" },
+  ];
+  p.scenes = scenes;
+  p.voice.notes = "Luna the Little Star sings the whole lullaby. Use Hedra: upload Luna's image + the Suno song audio to make her mouth move.";
+  p.edit.c1 = true;
+  return p;
+}
+
 /* ---------- Boot ---------- */
 load();
+if (firstVisit && state.projects.length === 0) {
+  const s = sampleProject();
+  state.projects.push(s);
+  state.activeId = s.id;
+  save();
+}
 bindGlobalEvents();
 render();
