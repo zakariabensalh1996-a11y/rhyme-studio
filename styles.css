@@ -80,6 +80,11 @@ body {
   border: 2px solid #efe9ff; box-shadow: 0 2px 6px rgba(120,90,200,.08);
 }
 .tool-link:hover { border-color: var(--purple); }
+.tool-best {
+  background: linear-gradient(90deg, var(--green), var(--blue)); color: #fff;
+  border-color: transparent; box-shadow: 0 3px 10px rgba(54,197,144,.3);
+}
+.tool-best:hover { border-color: transparent; filter: brightness(1.05); }
 
 /* ---------- Welcome ---------- */
 .welcome { display: flex; justify-content: center; padding: 60px 20px; }

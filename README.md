@@ -11,7 +11,7 @@ It walks you through 5 steps and gives you **ready-to-paste AI prompts** for eac
 | Step | You do | Free tool |
 |------|--------|-----------|
 | 1. 🎶 Song | Write lyrics → copy a Suno prompt | [Suno](https://suno.com), [Udio](https://www.udio.com) |
-| 2. 🧸 Characters | Describe each character → copy an image prompt | [Leonardo.ai](https://leonardo.ai), [Bing Image Creator](https://www.bing.com/images/create) |
+| 2. 🧸 Characters | Describe each character → copy an image prompt | **[Perchance](https://perchance.org/ai-text-to-image-generator) (free, no login!)**, [Leonardo.ai](https://leonardo.ai), [Bing](https://www.bing.com/images/create) |
 | 3. 🎬 Scenes | Build a shot list → copy image + video prompts | [Kling AI](https://klingai.com), [Hailuo](https://hailuoai.video), [Pika](https://pika.art) |
 | 4. 👄 Voice / lip-sync | Make mouths move to the song | [Hedra](https://www.hedra.com), [ElevenLabs](https://elevenlabs.io) |
 | 5. ✂️ Edit | Assemble clips on the beat, add captions | [CapCut](https://www.capcut.com), [DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve) |
