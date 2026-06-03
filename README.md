@@ -24,6 +24,12 @@ Click **📚 Templates** (top bar) or a template button on the welcome screen to
 - **🎉 Classic Medley** — Twinkle Twinkle + Old MacDonald + Wheels on the Bus + Baa Baa Black Sheep + If You're Happy. 5 characters, 21 scenes (~3–5 min).
 - **🐮 Farm Animals** — Old MacDonald with cow, pig, duck, sheep. 5 characters, 12 scenes.
 - **⭐ Bedtime Stars** — gentle Twinkle Twinkle lullaby. 3 characters, 10 scenes.
+- **🔤 ABC Phonics Song** — alphabet sing-along with a teacher mascot.
+- **🔢 Counting Song 1–10** — "Once I Caught a Fish Alive" counting rhyme.
+- **🌈 Colors Song** — learn red/yellow/blue/green with a painter.
+- **📖 The Three Little Pigs** — public-domain fairy-tale **story** mode (narration + soft music).
+
+These genres match popular preschool channels (nursery rhymes, lullabies, phonics, counting, colors, fairy tales).
 
 All use **public-domain rhymes + AI music = safe to monetize** on YouTube.
 

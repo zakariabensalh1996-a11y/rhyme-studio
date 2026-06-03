@@ -661,7 +661,141 @@ function bedtimeProject() {
   return p;
 }
 
-const TEMPLATES = { medley: medleyProject, farm: farmProject, bedtime: bedtimeProject };
+function abcProject() {
+  const p = blankProject("🔤 ABC Phonics Song");
+  p.artStyle = "bright colorful 3D cartoon, big friendly alphabet letters, playful classroom, rounded shapes, for toddlers";
+  p.song.style = "upbeat cheerful alphabet song, bright happy kids voice, playful piano and claps, clear sing-along";
+  p.song.lyrics = [
+    "A B C D E F G,",
+    "H I J K L M N O P,",
+    "Q R S, T U V,",
+    "W X Y and Z,",
+    "Now I know my ABCs,",
+    "Next time won't you sing with me!",
+  ].join("\n");
+  p.characters = [
+    { name: "Ellie the Elephant", desc: "a friendly little cartoon elephant teacher, big ears, round glasses, cheerful smile, waving trunk", link: "" },
+    { name: "Alphabet Blocks", desc: "cute colorful wooden letter blocks with happy faces, bright primary colors", link: "" },
+  ];
+  const rows = [
+    ["(Intro) Let's sing the ABCs!", "Bright cartoon classroom, Ellie the Elephant by a chalkboard waving, colorful letters floating", "Ellie waves, letters bounce in"],
+    ["A B C", "Big letters A, B, C pop up one by one with an Apple, Ball and Cat beside them", "each letter pops in with a sparkle"],
+    ["D E F G", "Letters D, E, F, G appear with a Duck, Egg, Fish and Goat, all smiling", "letters bounce in rhythm"],
+    ["H I J K L M N O P", "A cheerful train of letters H to P rolling across the screen, each on a train car", "letter train rolls left to right"],
+    ["Q R S, T U V", "Letters Q to V dancing in a row with little arms and big smiles", "letters do a little dance"],
+    ["W X Y and Z", "Letters W, X, Y, Z finish the line with confetti and stars", "letters jump, confetti bursts"],
+    ["Now I know my ABCs", "Ellie the Elephant proudly pointing at the full alphabet on the board, kids cheering", "Ellie points, sparkles on letters"],
+    ["(Outro) Next time won't you sing with me!", "End card: 'Great job! Subscribe' with Ellie waving and balloons", "Ellie waves goodbye, balloons float up"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Ellie the Elephant sings and teaches the letters. Show each letter big and clear as it is sung.";
+  return p;
+}
+
+function numbersProject() {
+  const p = blankProject("🔢 Counting Song 1–10");
+  p.artStyle = "bright playful 3D cartoon, colorful numbers, sunny pond theme, rounded shapes, for toddlers";
+  p.song.style = "fun bouncy kids counting song, bright voice, ukulele and claps, sing-along";
+  p.song.lyrics = [
+    "One, two, three, four, five,",
+    "Once I caught a fish alive,",
+    "Six, seven, eight, nine, ten,",
+    "Then I let it go again!",
+    "Why did you let it go?",
+    "Because it bit my finger so!",
+  ].join("\n");
+  p.characters = [
+    { name: "Finn the Fish", desc: "a cute smiling cartoon fish, bright orange, big eyes, tiny fins, friendly", link: "" },
+    { name: "Sammy the Kid", desc: "a happy cartoon toddler with a fishing net by a pond, sun hat, big smile", link: "" },
+  ];
+  const rows = [
+    ["(Intro) Let's count together!", "Sunny pond scene, Sammy the Kid waving with a net, numbers floating on lily pads", "Sammy waves, numbers bob on water"],
+    ["One, two, three, four, five", "Five colorful fish swimming, numbers 1 to 5 appearing above each fish", "fish swim in, numbers pop up"],
+    ["Once I caught a fish alive", "Sammy happily catching Finn the Fish in the net, water splashing", "net scoops, splash sparkles"],
+    ["Six, seven, eight, nine, ten", "Five more fish join, numbers 6 to 10 appear, ten fish smiling", "fish swim in, numbers count up"],
+    ["Then I let it go again!", "Sammy gently releasing Finn back into the pond, ripples spreading", "fish swims away, ripples"],
+    ["Why did you let it go?", "Close-up of Sammy shrugging with a puzzled happy face, question marks popping", "Sammy tilts head, question marks pop"],
+    ["Because it bit my finger so!", "Sammy laughing and holding up a finger, Finn winking cheekily", "Sammy shakes finger, fish winks"],
+    ["(Outro) Count again with me!", "End card: numbers 1-10 in a rainbow with 'Subscribe', Sammy and Finn waving", "numbers sparkle, characters wave"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Show each number big and clearly as it is counted. Sammy can sing.";
+  return p;
+}
+
+function colorsProject() {
+  const p = blankProject("🌈 Colors Song");
+  p.artStyle = "bright vibrant 3D cartoon, bold rainbow colors, cheerful, rounded shapes, for toddlers";
+  p.song.style = "happy upbeat kids colors song, bright cheerful voice, playful pop, sing-along";
+  p.song.lyrics = [
+    "Red like an apple, sweet and round,",
+    "Yellow like the sun shining down,",
+    "Blue like the ocean and the sky,",
+    "Green like the grass where bunnies hide,",
+    "Colors, colors everywhere,",
+    "Let's all sing them in the air!",
+  ].join("\n");
+  p.characters = [
+    { name: "Pip the Painter", desc: "a cheerful little cartoon character with a paintbrush and rainbow apron, big smile", link: "" },
+    { name: "Rainbow Bunny", desc: "a cute fluffy bunny, big happy eyes, bouncy, with rainbow-tipped ears", link: "" },
+  ];
+  const rows = [
+    ["(Intro) Let's learn the colors!", "Bright art studio, Pip the Painter waving a brush, rainbow paint splashes floating", "Pip waves, paint splashes sparkle"],
+    ["Red like an apple, sweet and round", "A big shiny red apple with a smile, red paint splash filling the scene", "apple bounces, red splash spreads"],
+    ["Yellow like the sun shining down", "A happy yellow sun with rays, yellow paint splash, sunflowers below", "sun beams pulse, yellow spreads"],
+    ["Blue like the ocean and the sky", "Blue ocean waves and sky, a little blue fish and cloud, blue paint splash", "waves roll, blue splash spreads"],
+    ["Green like the grass where bunnies hide", "Rainbow Bunny hopping in green grass, green paint splash, leaves around", "bunny hops, green spreads"],
+    ["Colors, colors everywhere", "All colors swirl together into a big bright rainbow, Pip and Bunny dancing", "rainbow forms, characters dance"],
+    ["(Outro) Let's all sing them in the air!", "End card: rainbow with 'Subscribe', Pip and Rainbow Bunny waving, confetti", "confetti bursts, characters wave"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "Flash each color big and bold as it is sung. Pip can sing.";
+  return p;
+}
+
+function storyProject() {
+  const p = blankProject("📖 The Three Little Pigs (Story)");
+  p.artStyle = "warm storybook 3D cartoon, cozy fairy-tale lighting, rounded shapes, gentle colors, for young children";
+  p.song.style = "gentle storytelling background music, soft and playful, light orchestra, warm feel (for narration)";
+  p.song.lyrics = [
+    "Once upon a time, there were three little pigs.",
+    "The first pig built his house of straw.",
+    "The second pig built his house of sticks.",
+    "The third pig built his house of strong bricks.",
+    "Along came a big bad wolf, hungry and sly.",
+    "He huffed and he puffed and blew the straw house down!",
+    "He huffed and he puffed and blew the stick house down!",
+    "But the brick house was too strong to fall.",
+    "The wolf gave up and ran away.",
+    "And the three little pigs lived happily ever after.",
+  ].join("\n");
+  p.characters = [
+    { name: "First Pig", desc: "a cheerful little pink piglet with a straw hat, big happy smile", link: "" },
+    { name: "Second Pig", desc: "a playful pink piglet holding a wooden stick, curious eyes", link: "" },
+    { name: "Third Pig", desc: "a clever pink piglet in builder's overalls with a trowel, confident smile", link: "" },
+    { name: "Big Bad Wolf", desc: "a funny (not scary) cartoon wolf, grey fur, big silly grin, puffy cheeks", link: "" },
+  ];
+  const rows = [
+    ["Once upon a time, there were three little pigs", "Storybook opening: three happy little pigs waving in a sunny meadow village", "book opens, pigs wave, gentle zoom"],
+    ["The first pig built his house of straw", "First Pig building a yellow straw house, whistling, hay flying", "pig stacks straw, hay floats"],
+    ["The second pig built his house of sticks", "Second Pig building a brown stick house, hammering happily", "pig hammers sticks, gentle bounce"],
+    ["The third pig built his house of strong bricks", "Third Pig carefully laying red bricks, a sturdy house rising", "pig lays bricks, house grows"],
+    ["Along came a big bad wolf, hungry and sly", "The funny Big Bad Wolf peeking from behind a tree with a silly grin", "wolf sneaks in, eyebrows wiggle"],
+    ["He huffed and he puffed and blew the straw house down!", "Wolf puffing huge cheeks, the straw house flying apart, first pig running", "big puff, straw scatters, pig runs"],
+    ["He huffed and he puffed and blew the stick house down!", "Wolf puffing again, the stick house tumbling, two pigs running to the brick house", "puff, sticks tumble, pigs run"],
+    ["But the brick house was too strong to fall", "Wolf puffing hard at the brick house but it stands firm, pigs safe inside smiling", "wolf strains, house stays, pigs peek out"],
+    ["The wolf gave up and ran away", "Tired wolf running off over the hill, the three pigs cheering", "wolf runs away, pigs jump for joy"],
+    ["And the three little pigs lived happily ever after", "End card: three pigs hugging outside the brick house at sunset, 'The End · Subscribe'", "pigs hug, slow zoom out, sparkle"],
+  ];
+  p.scenes = rows.map(([lyric, desc, motion]) => ({ lyric, desc, motion, status: "todo", link: "" }));
+  p.voice.notes = "This is a STORY, not a song — use a friendly NARRATOR voice (ElevenLabs free) reading each line over soft background music. Keep the wolf funny, not scary.";
+  return p;
+}
+
+const TEMPLATES = {
+  medley: medleyProject, farm: farmProject, bedtime: bedtimeProject,
+  abc: abcProject, numbers: numbersProject, colors: colorsProject, story: storyProject,
+};
 function loadTemplate(kind) {
   const builder = TEMPLATES[kind] || medleyProject;
   const m = builder();
