@@ -14,6 +14,7 @@ function blankProject(title) {
     id: "p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
     title: title || "My Nursery Rhyme",
     format: "16:9",
+    language: "English",
     artStyle: "cute 3D Pixar-style cartoon, soft lighting, rounded shapes, bright happy colors, for toddlers",
     song: { style: "cheerful kids song, gentle female voice, ukulele and bells, slow tempo", lyrics: "", link: "" },
     characters: [],
@@ -81,13 +82,20 @@ async function copyText(text, label) {
    Prompt generators — the heart of the app
    ========================================================= */
 function songPrompt(p) {
-  return [
+  const lang = (p.language || "").trim();
+  const out = [
     "=== STYLE OF MUSIC (paste in the Style box) ===",
     p.song.style || "cheerful kids nursery rhyme, gentle voice",
+  ];
+  if (lang && lang.toLowerCase() !== "english") out.push("sung in " + lang);
+  out.push(
     "",
     "=== LYRICS (paste in the Lyrics box) ===",
     p.song.lyrics || "(write your lyrics in Step 1 first)",
-  ].join("\n");
+  );
+  if (lang && lang.toLowerCase() !== "english")
+    out.push("", "(Tip: translate the lyrics above into " + lang + " before pasting.)");
+  return out.join("\n");
 }
 
 function characterPrompt(p, c) {
@@ -290,6 +298,20 @@ function sceneCard(p, s, idx) {
   status.addEventListener("change", () => { s.status = status.value; save(); updateProgress(p); });
   node.querySelector(".scene-img-prompt").addEventListener("click", () => copyText(sceneImagePrompt(p, s), "Image prompt (Scene " + (idx + 1) + ")"));
   node.querySelector(".scene-vid-prompt").addEventListener("click", () => copyText(sceneVideoPrompt(p, s), "Video prompt (Scene " + (idx + 1) + ")"));
+  node.querySelector(".move-up").addEventListener("click", () => {
+    if (idx === 0) return;
+    [p.scenes[idx - 1], p.scenes[idx]] = [p.scenes[idx], p.scenes[idx - 1]];
+    save(); renderScenes(p);
+  });
+  node.querySelector(".move-down").addEventListener("click", () => {
+    if (idx >= p.scenes.length - 1) return;
+    [p.scenes[idx + 1], p.scenes[idx]] = [p.scenes[idx], p.scenes[idx + 1]];
+    save(); renderScenes(p);
+  });
+  node.querySelector(".dup").addEventListener("click", () => {
+    p.scenes.splice(idx + 1, 0, Object.assign({}, s));
+    save(); renderScenes(p);
+  });
   node.querySelector(".btn-del").addEventListener("click", () => {
     p.scenes.splice(idx, 1); save(); renderScenes(p);
   });
@@ -316,19 +338,38 @@ function updateProgress(p) {
 /* =========================================================
    Events
    ========================================================= */
-function newProject() {
-  const title = prompt("Name your video:", "My Nursery Rhyme");
+function newProject(name) {
+  const title = typeof name === "string" ? name : prompt("Name your video:", "My Nursery Rhyme");
   if (title === null) return;
-  const p = blankProject(title.trim() || "My Nursery Rhyme");
+  const p = blankProject((title || "").trim() || "My Nursery Rhyme");
   state.projects.push(p);
   state.activeId = p.id;
   save(); render();
   toast("✨ New project created!");
 }
 
+const VIDEO_IDEAS = [
+  "Days of the Week Song", "Shapes Song (circle, square, triangle)", "Wash Your Hands Song",
+  "Brush Your Teeth Song", "Five Little Ducks", "Itsy Bitsy Spider",
+  "Head, Shoulders, Knees and Toes", "Weather Song (sunny, rainy, snowy)", "Seasons Song",
+  "Feelings & Emotions Song", "Fruits Song", "Vegetables Song", "Vehicles Song (car, bus, train)",
+  "Jungle Animals Song", "Sea Animals Song", "Dinosaurs Song", "Bath Time Song",
+  "Clean Up Song", "Hello & Goodbye Song", "Counting to 20", "Opposites Song (big/small)",
+  "Family Song (mommy, daddy, baby)", "Please and Thank You Song", "Five Little Monkeys",
+  "The Alphabet Animals (A is for Ant)", "Good Morning Song", "Rainbow Song",
+];
+function suggestIdea() {
+  const idea = VIDEO_IDEAS[Math.floor(Math.random() * VIDEO_IDEAS.length)];
+  if (confirm("💡 Video idea:\n\n   “" + idea + "”\n\nStart a new project with this title?"))
+    newProject(idea);
+  else
+    toast("💡 Idea: " + idea);
+}
+
 function bindGlobalEvents() {
-  $("#newProjectBtn").addEventListener("click", newProject);
-  $("#welcomeNewBtn").addEventListener("click", newProject);
+  $("#newProjectBtn").addEventListener("click", () => newProject());
+  $("#welcomeNewBtn").addEventListener("click", () => newProject());
+  $("#ideaBtn").addEventListener("click", suggestIdea);
 
   // Templates dropdown
   $("#templatesBtn").addEventListener("click", e => {
@@ -848,6 +889,7 @@ function productionPack(p) {
   const L = [];
   L.push("PRODUCTION PACK — " + cleanTitle(p));
   L.push("Format: " + (p.format === "9:16" ? "Shorts 9:16 (tall)" : "YouTube 16:9 (wide)"));
+  L.push("Language: " + (p.language || "English"));
   L.push("Art style: " + p.artStyle);
   L.push("Estimated length: " + p.scenes.length + " clips ≈ " + (p.scenes.length * SECONDS_PER_CLIP) + " seconds");
   L.push("", bar, "STEP 1 — SONG (paste into Suno)", bar, songPrompt(p));

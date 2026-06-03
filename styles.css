@@ -70,6 +70,9 @@ body {
 .btn-del {
   background: #ffe3ee; color: #d6336c; padding: 6px 10px; border-radius: 10px; font-weight: 800;
 }
+.btn-mini {
+  background: #ece7fb; color: var(--purple); padding: 6px 9px; border-radius: 9px; font-weight: 800; font-size: 13px;
+}
 .btn-danger-text { background: transparent; color: #d6336c; }
 .tool-link {
   display: inline-block; text-decoration: none; font-weight: 700; font-size: 14px;

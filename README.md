@@ -45,6 +45,11 @@ In **Step 1** pick **16:9 (YouTube)** or **9:16 (Shorts / TikTok / Reels)** — 
 
 *(These were modeled on common features in open-source AI video tools like ViMax, YumCut, and faceless-video generators — kept to what works in a free, no-server app.)*
 
+### 🛠️ More tools
+- **🔀 Reorder / duplicate scenes** — ▲ ▼ to move a scene, ⧉ to copy it (handy for long shot lists).
+- **🌍 Song language** (Step 1) — make the same video in Spanish, Arabic, Hindi, etc. The language is added to your Suno prompt.
+- **💡 Idea button** (top bar) — suggests your next preschool video topic and can start a project with it, so the channel never runs dry.
+
 ---
 
 ## ▶️ Run it on your computer

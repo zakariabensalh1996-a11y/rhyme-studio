@@ -20,6 +20,7 @@
     <div class="topbar-actions">
       <select id="projectPicker" title="Switch project"></select>
       <button id="newProjectBtn" class="btn btn-light">+ New</button>
+      <button id="ideaBtn" class="btn btn-light" title="Get a new video idea">💡 Idea</button>
       <div class="dropdown">
         <button id="templatesBtn" class="btn btn-light" title="Load a ready-made project">📚 Templates ▾</button>
         <div id="templateMenu" class="dropdown-menu hidden">
@@ -89,13 +90,26 @@
         </div>
       </div>
 
-      <div class="field">
-        <label>Video format</label>
-        <select data-bind="format">
-          <option value="16:9">📺 YouTube — wide 16:9 (normal video)</option>
-          <option value="9:16">📱 Shorts / TikTok / Reels — tall 9:16</option>
-        </select>
-        <small class="hint">This is added to your picture and video prompts automatically.</small>
+      <div class="grid">
+        <div class="field">
+          <label>Video format</label>
+          <select data-bind="format">
+            <option value="16:9">📺 YouTube — wide 16:9 (normal video)</option>
+            <option value="9:16">📱 Shorts / TikTok / Reels — tall 9:16</option>
+          </select>
+          <small class="hint">Added to your picture/video prompts automatically.</small>
+        </div>
+        <div class="field">
+          <label>🌍 Song language</label>
+          <input type="text" data-bind="language" list="langList" placeholder="English" />
+          <datalist id="langList">
+            <option>English</option><option>Spanish</option><option>French</option>
+            <option>Arabic</option><option>Hindi</option><option>Portuguese</option>
+            <option>German</option><option>Indonesian</option><option>Turkish</option>
+            <option>Russian</option><option>Japanese</option><option>Chinese</option>
+          </datalist>
+          <small class="hint">Make the same video in another language for more viewers.</small>
+        </div>
       </div>
 
       <div class="field">
@@ -304,6 +318,9 @@
           <option value="image">🖼️ Image done</option>
           <option value="clip">✅ Clip done</option>
         </select>
+        <button class="btn btn-mini move-up" title="Move up">▲</button>
+        <button class="btn btn-mini move-down" title="Move down">▼</button>
+        <button class="btn btn-mini dup" title="Duplicate scene">⧉</button>
         <button class="btn btn-del" title="Remove">✕</button>
       </div>
       <textarea class="scene-desc" rows="2" placeholder="What we see: Lila the Lamb hops across a sunny green hill, butterflies around her"></textarea>
